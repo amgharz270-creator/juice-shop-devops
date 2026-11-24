@@ -4,16 +4,21 @@
 podman run --rm -v trivy-cache:/root/.cache/ docker.io/aquasec/trivy image --severity HIGH,CRITICAL docker.io/bkimminich/juice-shop:latest
 
 ## Résultats
-- 33 vulnérabilités HIGH/CRITICAL au total (26 HIGH, 7 CRITICAL)
-- 5 cibles analysées
-- Une cible concentre 28 failles, dont les 7 CRITICAL
-- Paquets les plus touchés : (à compléter)
+- 30 vulnérabilités HIGH/CRITICAL au total (23 HIGH, 7 CRITICAL)
+- Debian 13.7 : 2 HIGH, 0 CRITICAL
+- Node.js : 21 HIGH, 7 CRITICAL
+- Package identifié parmi les vulnérabilités CRITICAL : crypto-js
+- Autres packages identifiés : express-jwt, libssl3t64
 
 ## Analyse
-Juice Shop est une application volontairement vulnérable : ces résultats sont attendus.
-La majorité des failles vient des dépendances applicatives.
-Une mise à jour des paquets ayant une "Fixed Version" réduirait le risque.
+L'image Juice Shop contient des vulnérabilités dans ses dépendances
+système et applicatives.
 
+Les vulnérabilités CRITICAL identifiées concernent notamment crypto-js.
+Les vulnérabilités HIGH incluent express-jwt et libssl3t64.
+
+Une mise à jour des dépendances vers les versions corrigées,
+lorsqu'elles sont disponibles, permettrait de réduire le risque
 ## Recommandation pour la pipeline
 Le Security Gate pourrait bloquer le déploiement si le nombre de CRITICAL
 augmente par rapport à cette référence (7).
