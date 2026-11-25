@@ -12,7 +12,7 @@ pipeline {
 
         stage('Initialisation DevSecOps') {
             steps {
-                echo 'Pipeline DevSecOps initialisee'
+                echo 'Test du declenchement automatique Jenkins'
             }
         }
     }
