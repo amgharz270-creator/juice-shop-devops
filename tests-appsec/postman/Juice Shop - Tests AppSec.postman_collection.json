@@ -1,0 +1,113 @@
+{
+  "info": {
+    "_postman_id": "ccf29fcb-9093-44bd-8c62-f5d4d9662b86",
+    "name": "Juice Shop - Tests AppSec",
+    "description": "### Welcome to Postman! This is your first collection.\n\nCollections are your starting point for building and testing APIs. You can use this one to:\n\n• Group related requests  \n• Test your API in real-world scenarios  \n• Document and share your requests\n\nUpdate the name and overview whenever you’re ready to make it yours.\n\n[Learn more about Postman Collections.](https://learning.postman.com/docs/collections/collections-overview/)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "60429543",
+    "_collection_link": "https://go.postman.co/collection/60429543-ccf29fcb-9093-44bd-8c62-f5d4d9662b86?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "POST Créer compte",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"testappsec@juice.local\",\r\n  \"password\": \"Test1234!\",\r\n  \"passwordRepeat\": \"Test1234!\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/Users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "Users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Login réussi (200)\", () => pm.response.to.have.status(200));\r\n\r\nconst json = pm.response.json();\r\npm.test(\"Token présent\", () =>\r\n  pm.expect(json.authentication.token).to.be.a(\"string\"));\r\n\r\npm.environment.set(\"token\", json.authentication.token);\r\npm.environment.set(\"basketId\", json.authentication.bid);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"testappsec@juice.local\",\r\n  \"password\": \"Test1234!\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/rest/user/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rest",
+                "user",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "GET Liste des produits",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200\", () => pm.response.to.have.status(200));\n\npm.test(\"Réponse en moins de 1000 ms\", () =>\n  pm.expect(pm.response.responseTime).to.be.below(1000));\n\npm.test(\"La liste des produits est présente\", () => {\n  const json = pm.response.json();\n  pm.expect(json.data).to.be.an(\"array\");\n  pm.expect(json.data.length).to.be.above(0);\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/Products",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "Products"
+          ]
+        },
+        "description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
+      },
+      "response": []
+    }
+  ]
+}
